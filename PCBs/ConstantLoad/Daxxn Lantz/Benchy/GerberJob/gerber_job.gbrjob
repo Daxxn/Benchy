@@ -1,0 +1,24 @@
+{
+    "Header": {
+        "Comment": "All values are metric (mm)",
+        "CreationDate": "2022-05-23T02:04:03Z",
+        "GenerationSoftware": {
+            "Application": "EAGLE",
+            "Vendor": "Autodesk",
+            "Version": "9.7.0"
+        },
+        "Part": "Single"
+    },
+    "Overall": {
+        "BoardThickness": 1.57,
+        "LayerNumber": 2,
+        "Name": {
+            "ProjectId": "Benchy-ConstantLoad-REV1-PCB v18"
+        },
+        "Owner": "Daxxn Lantz <nynjalantz@gmail.com>",
+        "Size": {
+            "X": 110,
+            "Y": 50
+        }
+    }
+}

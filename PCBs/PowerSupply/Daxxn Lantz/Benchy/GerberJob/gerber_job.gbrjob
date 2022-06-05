@@ -1,0 +1,24 @@
+{
+    "Header": {
+        "Comment": "All values are metric (mm)",
+        "CreationDate": "2022-05-23T03:36:48Z",
+        "GenerationSoftware": {
+            "Application": "EAGLE",
+            "Vendor": "Autodesk",
+            "Version": "9.7.0"
+        },
+        "Part": "Single"
+    },
+    "Overall": {
+        "BoardThickness": 1.57,
+        "LayerNumber": 2,
+        "Name": {
+            "ProjectId": "BenchHelper-PowerSupply-REV1-PCB v38"
+        },
+        "Owner": "Daxxn Lantz <nynjalantz@gmail.com>",
+        "Size": {
+            "X": 100,
+            "Y": 97.93
+        }
+    }
+}

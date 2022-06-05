@@ -1,0 +1,24 @@
+{
+    "Header": {
+        "Comment": "All values are metric (mm)",
+        "CreationDate": "2022-05-29T18:10:18Z",
+        "GenerationSoftware": {
+            "Application": "EAGLE",
+            "Vendor": "Autodesk",
+            "Version": "9.7.0"
+        },
+        "Part": "Single"
+    },
+    "Overall": {
+        "BoardThickness": 1.57,
+        "LayerNumber": 4,
+        "Name": {
+            "ProjectId": "BenchHelper-Main-REV2-PCB v73"
+        },
+        "Owner": "Daxxn Lantz <nynjalantz@gmail.com>",
+        "Size": {
+            "X": 100,
+            "Y": 108
+        }
+    }
+}
