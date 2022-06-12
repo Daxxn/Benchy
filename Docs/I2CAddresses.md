@@ -8,17 +8,21 @@
 
 ## Power Supply
 
-> Main Controller : 0x11
+> Controller : 0x11
 >
 > Front Pannel (Arduino NANO) : 0x12
 
+## Electronic Load
+
+> Controller : 0x21
+
 ## Function Generator / LCR Meter
 
-> Controller (Arduino NANO) : 0x21
+> Controller (Arduino NANO) : 0x31
 >
 > Front Pannel (PCA9634) : 0x###
 >
-> LCR Meter (Arduino NANO) : 0x23
+> LCR Meter (Arduino NANO) : 0x33
 
 ## Relays
 

@@ -1,18 +1,22 @@
 #include <Arduino.h>
 #include <Wire.h>
-#include "BenchyPowerSupplyPinout.h"
+#include "BenchyPowerSupplyREV2Pinout.h"
 #include "IntConverter.h"
 
 #define recieveBufferSize 16
 #define sendBufferSize 8
 
-const int FRONT_ADDR = 42;
-const int address = 32;
+#define V12DividerRatio 0.33
+#define V30DividerRatio 0.091
+
+const int FRONT_ADDR = 0x12;
+const int address = 0x11;
 
 uint8_t receiveBuffer[recieveBufferSize] = {};
 uint8_t sendBuffer[sendBufferSize] = {};
 uint8_t receiveCommand = 0;
 uint8_t sendCommand = 0;
+uint8_t readSelect = 0;
 
 uint8_t lowSetVoltage = 0;
 uint8_t lowSetCurrent = 0;
@@ -88,6 +92,11 @@ void SetPSStatesCMD()
   highPSEnable = val & 0b10;
 }
 
+void SetReadRegisterCMD()
+{
+  readSelect = receiveBuffer[1];
+}
+
 int PSMonitorCMD()
 {
   sendBuffer[8] = {};
@@ -130,6 +139,8 @@ void (*receiveActions[])() = {
   LowPSSetVoltageCMD,
   LowPSSetCurrentCMD,
   HighPSSetVoltageCMD,
+  SetPSStatesCMD,
+  SetReadRegisterCMD
 };
 
 int (*sendActions[])() = {
@@ -141,22 +152,54 @@ int (*sendActions[])() = {
 
 void I2CReceive(int len)
 {
-  if (len > 0)
+  int available = Wire.available();
+  for (size_t i = 0; i < available; i++)
   {
-    Wire.readBytes(receiveBuffer, len);
-    receiveCommand = receiveBuffer[0];
-    receiveActions[receiveCommand]();
+    receiveBuffer[i] = Wire.read();
   }
+  // Wire.readBytes(receiveBuffer, len);
+  receiveCommand = receiveBuffer[0];
+  receiveActions[receiveCommand]();
 }
 
 void I2CRequest()
 {
-  sendCommand = Wire.read();
-  int size = sendActions[sendCommand]();
+  sendBuffer[sendBufferSize] = {};
+  int size = sendActions[readSelect]();
+  // int size = 0;
+  // if (sendCommand == 0) {
+  //   size = PSMonitorCMD();
+  // }
+  // else if (sendCommand == 1) {
+  //   size = PowerRailMonitorCMD();
+  // }
+  // else if (sendCommand == 2) {
+  //   size = StatusCMD();
+  // }
   Wire.write(sendBuffer, size);
 }
 
-void setup() {
+#pragma region PS Functions
+void AnalogRead()
+{
+  // Not implemented on REV1
+  // Added to REV2
+  lowPSCurrent++;
+  highPSCurrent = analogRead(Anlg::PowerPins::HIGH_CC_SENSE_PIN);
+  V12Sense = analogRead(Anlg::PowerPins::V12_SENSE_PIN);
+  V30Sense = analogRead(Anlg::PowerPins::V30_SENSE_PIN);
+}
+
+void SetPowerSupplies()
+{
+  analogWrite(Digitl::PowerPins::LOW_ISET_PIN, lowSetCurrent);
+  analogWrite(Digitl::PowerPins::LOW_VSET_PIN, lowSetVoltage);
+  analogWrite(Digitl::PowerPins::HIGH_PWM_PIN, highSet);
+}
+#pragma endregion
+
+void setup()
+{
   Wire.begin(address);
   Wire.onReceive(I2CReceive);
   Wire.onRequest(I2CRequest);
@@ -165,12 +208,9 @@ void setup() {
   InitPins();
 }
 
-void loop() {
-  // Wire.beginTransmission(42);
-  // Wire.write("Test");
-  // Wire.endTransmission();
-
-  // highSet++;
-  // analogWrite(Digitl::PowerPins::HIGH_PWM_PIN, highSet);
-  delay(100);
+void loop()
+{
+  AnalogRead();
+  SetPowerSupplies();
+  delay(10);
 }
